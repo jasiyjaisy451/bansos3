@@ -205,7 +205,7 @@
 
         <div class="qr-section">
             <p><strong>QR Code Verifikasi:</strong></p>
-            <img src="data:image/png;base64,{{ base64_encode(QrCode::format('png')->size(150)->generate($encryptedCode)) }}" alt="QR Code">
+            <img src="data:image/png;base64,{{ base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(150)->generate($encryptedCode)) }}" alt="QR Code">
             <br>
             <small>{{ $recipient->qr_code }}</small>
         </div>

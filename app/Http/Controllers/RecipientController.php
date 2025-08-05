@@ -118,19 +118,29 @@ class RecipientController extends Controller
         ]);
 
         try {
-            $decoded = base64_decode($request->qr_code);
-            $parts = explode('|', $decoded);
-
-            if (count($parts) !== 2) {
-                return response()->json(['error' => 'QR Code tidak valid'], 400);
+            // Try to decode base64 first (for scanned QR codes)
+            $qrInput = $request->qr_code;
+            $recipient = null;
+            
+            // Check if it's a base64 encoded QR code
+            if (base64_decode($qrInput, true) !== false) {
+                $decoded = base64_decode($qrInput);
+                $parts = explode('|', $decoded);
+                
+                if (count($parts) === 2) {
+                    $qrCode = $parts[0];
+                    $recipientId = $parts[1];
+                    
+                    $recipient = Recipient::where('qr_code', $qrCode)
+                        ->where('id', $recipientId)
+                        ->first();
+                }
             }
-
-            $qrCode = $parts[0];
-            $recipientId = $parts[1];
-
-            $recipient = Recipient::where('qr_code', $qrCode)
-                ->where('id', $recipientId)
-                ->first();
+            
+            // If not found, try direct QR code search
+            if (!$recipient) {
+                $recipient = Recipient::where('qr_code', $qrInput)->first();
+            }
 
             if (!$recipient) {
                 return response()->json(['error' => 'QR Code tidak ditemukan'], 404);
@@ -143,7 +153,7 @@ class RecipientController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            return response()->json(['error' => 'QR Code tidak valid'], 400);
+            return response()->json(['error' => 'QR Code tidak valid: ' . $e->getMessage()], 400);
         }
     }
 
@@ -155,25 +165,38 @@ class RecipientController extends Controller
             'bag_received' => 'boolean',
         ]);
 
-        $recipient->update([
-            'uniform_received' => $request->boolean('uniform_received'),
-            'shoes_received' => $request->boolean('shoes_received'),
-            'bag_received' => $request->boolean('bag_received'),
-        ]);
-
-        // Check if all items are distributed
-        if ($recipient->isFullyDistributed()) {
+        try {
             $recipient->update([
-                'is_distributed' => true,
-                'distributed_at' => now()
+                'uniform_received' => $request->boolean('uniform_received'),
+                'shoes_received' => $request->boolean('shoes_received'),
+                'bag_received' => $request->boolean('bag_received'),
             ]);
-        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Status penyaluran berhasil diperbarui',
-            'is_fully_distributed' => $recipient->isFullyDistributed()
-        ]);
+            // Check if all items are distributed
+            if ($recipient->isFullyDistributed()) {
+                $recipient->update([
+                    'is_distributed' => true,
+                    'distributed_at' => now()
+                ]);
+            } else {
+                $recipient->update([
+                    'is_distributed' => false,
+                    'distributed_at' => null
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status penyaluran berhasil diperbarui',
+                'is_fully_distributed' => $recipient->fresh()->isFullyDistributed(),
+                'recipient' => $recipient->fresh()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function generateReceipt(Recipient $recipient)

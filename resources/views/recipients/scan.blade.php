@@ -94,12 +94,25 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    let currentRecipient = null;
+    
     // Auto-submit when QR input changes (for scanner)
     $('#qr_input').on('input', function() {
-        if ($(this).val().length > 10) {
+        const value = $(this).val().trim();
+        if (value.length > 5) {
             setTimeout(() => {
-                $('#qrForm').submit();
+                if ($('#qr_input').val().trim() === value) {
+                    $('#qrForm').submit();
+                }
             }, 500);
+        }
+    });
+    
+    // Handle Enter key
+    $('#qr_input').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $('#qrForm').submit();
         }
     });
 
@@ -112,6 +125,10 @@ $(document).ready(function() {
             alert('Masukkan kode QR terlebih dahulu');
             return;
         }
+        
+        // Show loading
+        $('#resultContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Memverifikasi...</div>');
+        $('#resultCard').show();
 
         $.ajax({
             url: '{{ route("recipients.verify-qr") }}',
@@ -122,6 +139,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.success) {
+                    currentRecipient = response.recipient;
                     displayRecipientInfo(response.recipient);
                     $('#distributionSection').show();
                     $('#recipient_id').val(response.recipient.id);
@@ -142,6 +160,7 @@ $(document).ready(function() {
                     </div>
                 `);
                 $('#distributionSection').hide();
+                currentRecipient = null;
             }
         });
     });
@@ -151,12 +170,22 @@ $(document).ready(function() {
         e.preventDefault();
         
         const recipientId = $('#recipient_id').val();
+        if (!recipientId) {
+            alert('Data penerima tidak ditemukan');
+            return;
+        }
+        
         const formData = {
             uniform_received: $('#uniform_received').is(':checked'),
             shoes_received: $('#shoes_received').is(':checked'),
             bag_received: $('#bag_received').is(':checked'),
             _token: '{{ csrf_token() }}'
         };
+        
+        // Show loading
+        const submitBtn = $('#distributionForm button[type="submit"]');
+        const originalText = submitBtn.html();
+        submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Memperbarui...').prop('disabled', true);
 
         $.ajax({
             url: `/recipients/${recipientId}/distribute`,
@@ -164,10 +193,23 @@ $(document).ready(function() {
             data: formData,
             success: function(response) {
                 if (response.success) {
-                    alert(response.message);
+                    // Update current recipient data
+                    if (response.recipient) {
+                        currentRecipient = response.recipient;
+                        displayRecipientInfo(currentRecipient);
+                    }
+                    
+                    // Show success message
+                    $('#resultContent').prepend(`
+                        <div class="alert alert-success alert-dismissible fade show">
+                            <i class="fas fa-check-circle me-2"></i>
+                            ${response.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `);
                     
                     if (response.is_fully_distributed) {
-                        $('#resultContent').append(`
+                        $('#resultContent').prepend(`
                             <div class="alert alert-success mt-3">
                                 <i class="fas fa-check-circle me-2"></i>
                                 Penyaluran lengkap! Bukti penerimaan dapat dicetak.
@@ -177,10 +219,17 @@ $(document).ready(function() {
                             </div>
                         `);
                     }
+                } else {
+                    alert(response.message || 'Terjadi kesalahan');
                 }
             },
             error: function(xhr) {
-                alert('Terjadi kesalahan saat memperbarui data');
+                const response = xhr.responseJSON;
+                alert(response.message || 'Terjadi kesalahan saat memperbarui data');
+            },
+            complete: function() {
+                // Restore button
+                submitBtn.html(originalText).prop('disabled', false);
             }
         });
     });
@@ -234,6 +283,7 @@ function resetForm() {
     $('#resultCard').hide();
     $('#distributionSection').hide();
     $('#distributionForm')[0].reset();
+    currentRecipient = null;
 }
 </script>
 @endpush

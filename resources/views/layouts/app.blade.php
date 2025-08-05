@@ -113,6 +113,15 @@
                             <i class="fas fa-qrcode me-2"></i> Scan QR Code
                         </a>
                     </li>
+                    <li class="nav-item mt-4">
+                        <a class="nav-link text-light" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -121,6 +130,10 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">@yield('title', 'Dashboard')</h1>
+                <div class="text-muted">
+                    <i class="fas fa-user me-1"></i>
+                    {{ Auth::user()->name ?? 'Admin' }}
+                </div>
             </div>
 
             @if(session('success'))

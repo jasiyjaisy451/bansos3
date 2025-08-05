@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Recipient;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +14,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create admin user
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@bansos.com',
+            'password' => Hash::make('password123'),
+        ]);
+        
+        User::create([
+            'name' => 'Operator',
+            'email' => 'operator@bansos.com',
+            'password' => Hash::make('operator123'),
+        ]);
+
         // Create sample recipients for testing
         for ($i = 1; $i <= 10; $i++) {
             Recipient::create([
@@ -28,10 +43,5 @@ class DatabaseSeeder extends Seeder
                 'shirt_size' => 'M',
             ]);
         }
-
-        \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@bansos.com',
-        ]);
     }
 }
