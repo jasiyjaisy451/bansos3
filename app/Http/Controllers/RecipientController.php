@@ -159,21 +159,21 @@ class RecipientController extends Controller
 
     public function distribute(Request $request, Recipient $recipient)
     {
-        $request->validate([
-            'uniform_received' => 'boolean',
-            'shoes_received' => 'boolean',
-            'bag_received' => 'boolean',
-        ]);
-
         try {
+            // Convert checkbox values to boolean
+            $uniformReceived = $request->has('uniform_received') ? true : false;
+            $shoesReceived = $request->has('shoes_received') ? true : false;
+            $bagReceived = $request->has('bag_received') ? true : false;
+
             $recipient->update([
-                'uniform_received' => $request->boolean('uniform_received'),
-                'shoes_received' => $request->boolean('shoes_received'),
-                'bag_received' => $request->boolean('bag_received'),
+                'uniform_received' => $uniformReceived,
+                'shoes_received' => $shoesReceived,
+                'bag_received' => $bagReceived,
             ]);
 
             // Check if all items are distributed
-            if ($recipient->isFullyDistributed()) {
+            $recipient->refresh();
+            if ($recipient->uniform_received && $recipient->shoes_received && $recipient->bag_received) {
                 $recipient->update([
                     'is_distributed' => true,
                     'distributed_at' => now()
@@ -185,16 +185,18 @@ class RecipientController extends Controller
                 ]);
             }
 
+            $recipient->refresh();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Status penyaluran berhasil diperbarui',
-                'is_fully_distributed' => $recipient->fresh()->isFullyDistributed(),
-                'recipient' => $recipient->fresh()
+                'is_fully_distributed' => $recipient->is_distributed,
+                'recipient' => $recipient
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                'message' => 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -210,6 +212,47 @@ class RecipientController extends Controller
         $pdf = Pdf::loadView('recipients.receipt', compact('recipient', 'encryptedCode'));
 
         return $pdf->download('bukti-penerimaan-' . $recipient->qr_code . '.pdf');
+    }
+
+    public function generateSignatureForm(Recipient $recipient)
+    {
+        if (!$recipient->is_distributed) {
+            return redirect()->back()->with('error', 'Penyaluran belum selesai');
+        }
+
+        $encryptedCode = base64_encode($recipient->qr_code . '|' . $recipient->id);
+
+        $pdf = Pdf::loadView('recipients.signature-form', compact('recipient', 'encryptedCode'));
+
+        return $pdf->download('form-tanda-tangan-' . $recipient->qr_code . '.pdf');
+    }
+
+    public function generateReport()
+    {
+        $totalRecipients = Recipient::count();
+        $distributedCount = Recipient::where('is_distributed', true)->count();
+        $pendingCount = $totalRecipients - $distributedCount;
+        
+        $uniformCount = Recipient::where('uniform_received', true)->count();
+        $shoesCount = Recipient::where('shoes_received', true)->count();
+        $bagCount = Recipient::where('bag_received', true)->count();
+        
+        $recipients = Recipient::orderBy('created_at', 'desc')->get();
+        $distributedRecipients = Recipient::where('is_distributed', true)
+            ->orderBy('distributed_at', 'desc')->get();
+
+        $pdf = Pdf::loadView('recipients.report', compact(
+            'totalRecipients',
+            'distributedCount', 
+            'pendingCount',
+            'uniformCount',
+            'shoesCount',
+            'bagCount',
+            'recipients',
+            'distributedRecipients'
+        ));
+
+        return $pdf->download('laporan-bansos-pendidikan-' . date('Y-m-d') . '.pdf');
     }
 
     private function generateUniqueQrCode()

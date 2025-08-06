@@ -36,4 +36,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/verify-qr', [RecipientController::class, 'verifyQr'])->name('recipients.verify-qr');
     Route::post('/recipients/{recipient}/distribute', [RecipientController::class, 'distribute'])->name('recipients.distribute');
     Route::get('/recipients/{recipient}/receipt', [RecipientController::class, 'generateReceipt'])->name('recipients.receipt');
+    Route::get('/recipients/{recipient}/signature', [RecipientController::class, 'generateSignatureForm'])->name('recipients.signature');
+    Route::get('/report', [RecipientController::class, 'generateReport'])->name('recipients.report');
 });

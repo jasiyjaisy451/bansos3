@@ -4,240 +4,350 @@
     <meta charset="utf-8">
     <title>Bukti Penerimaan Bansos - {{ $recipient->qr_code }}</title>
     <style>
+        @page {
+            margin: 2cm;
+            size: A4;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', serif;
             margin: 0;
-            padding: 20px;
-            font-size: 12px;
+            padding: 0;
+            font-size: 12pt;
+            line-height: 1.4;
+            color: #000;
         }
-        .header {
+        
+        .letterhead {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 20px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
-        .logo {
-            font-size: 24px;
+        
+        .letterhead h1 {
+            font-size: 18pt;
             font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            margin: 0;
+            text-transform: uppercase;
         }
-        .title {
-            font-size: 18px;
+        
+        .letterhead h2 {
+            font-size: 16pt;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin: 5px 0;
+            text-transform: uppercase;
         }
-        .subtitle {
-            font-size: 14px;
-            color: #666;
+        
+        .letterhead p {
+            font-size: 11pt;
+            margin: 2px 0;
         }
+        
+        .document-title {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .document-title h3 {
+            font-size: 14pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        
+        .document-number {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 11pt;
+        }
+        
         .content {
-            margin-bottom: 30px;
-        }
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .info-table td {
-            padding: 8px;
-            border: 1px solid #ddd;
-        }
-        .info-table .label {
-            background-color: #f5f5f5;
-            font-weight: bold;
-            width: 30%;
-        }
-        .items-section {
             margin: 20px 0;
         }
+        
+        .opening-text {
+            text-align: justify;
+            margin-bottom: 20px;
+            text-indent: 30px;
+        }
+        
+        .recipient-data {
+            margin: 20px 0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .data-table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+        
+        .data-table .label {
+            width: 25%;
+            font-weight: bold;
+        }
+        
+        .data-table .colon {
+            width: 3%;
+            text-align: center;
+        }
+        
+        .items-section {
+            margin: 25px 0;
+        }
+        
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin: 15px 0;
         }
+        
         .items-table th,
         .items-table td {
-            padding: 10px;
-            border: 1px solid #333;
+            border: 1px solid #000;
+            padding: 8px;
             text-align: center;
         }
+        
         .items-table th {
-            background-color: #333;
-            color: white;
+            background-color: #f0f0f0;
             font-weight: bold;
         }
-        .qr-section {
-            text-align: center;
-            margin: 20px 0;
+        
+        .items-table .text-left {
+            text-align: left;
         }
+        
+        .status-received {
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .closing-text {
+            text-align: justify;
+            margin: 25px 0;
+            text-indent: 30px;
+        }
+        
         .signature-section {
             margin-top: 40px;
         }
+        
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .signature-table td {
+            width: 50%;
+            text-align: center;
+            vertical-align: top;
+            padding: 10px;
+        }
+        
         .signature-box {
-            display: inline-block;
-            width: 200px;
-            text-align: center;
-            margin: 0 20px;
+            margin: 20px 0;
         }
+        
         .signature-line {
-            border-top: 1px solid #333;
-            margin-top: 60px;
-            padding-top: 5px;
+            border-bottom: 1px solid #000;
+            height: 60px;
+            margin: 10px 0;
         }
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 10px;
-            color: #666;
-        }
-        .received-mark {
-            color: #28a745;
+        
+        .signature-name {
             font-weight: bold;
+            margin-top: 5px;
         }
-        .not-received-mark {
-            color: #dc3545;
+        
+        .qr-section {
+            text-align: center;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 10pt;
+            text-align: center;
+            border-top: 1px solid #000;
+            padding-top: 10px;
+        }
+        
+        .date-location {
+            text-align: right;
+            margin: 20px 0;
+        }
+        
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">BAZMA PERTAMINA</div>
-        <div class="title">BUKTI PENERIMAAN BANTUAN SOSIAL PENDIDIKAN</div>
-        <div class="subtitle">Program Cilincing - Jakarta Utara</div>
+    <div class="letterhead">
+        <h1>Yayasan Bazma</h1>
+        <h2>Program Bantuan Sosial Pendidikan</h2>
+        <p>Bekerjasama dengan PT Pertamina (Persero)</p>
+        <p>Jl. Cilincing Raya, Jakarta Utara 14120</p>
+        <p>Telp: (021) 4401234 | Email: info@bazma.org</p>
+    </div>
+
+    <div class="document-title">
+        <h3>Bukti Penerimaan Bantuan Sosial Pendidikan</h3>
+    </div>
+    
+    <div class="document-number">
+        Nomor: {{ $recipient->qr_code }}/BSP/{{ date('Y') }}
     </div>
 
     <div class="content">
-        <table class="info-table">
-            <tr>
-                <td class="label">Kode QR</td>
-                <td><strong>{{ $recipient->qr_code }}</strong></td>
-            </tr>
-            <tr>
-                <td class="label">Nama Anak</td>
-                <td>{{ $recipient->child_name }}</td>
-            </tr>
-            <tr>
-                <td class="label">Nama Orang Tua</td>
-                <td>{{ $recipient->parent_name }}</td>
-            </tr>
-            <tr>
-                <td class="label">Tempat, Tanggal Lahir</td>
-                <td>{{ $recipient->birth_place }}, {{ $recipient->birth_date->format('d F Y') }}</td>
-            </tr>
-            <tr>
-                <td class="label">Sekolah</td>
-                <td>{{ $recipient->school_name }} ({{ $recipient->school_level }})</td>
-            </tr>
-            <tr>
-                <td class="label">Kelas</td>
-                <td>{{ $recipient->class }}</td>
-            </tr>
-            <tr>
-                <td class="label">Alamat</td>
-                <td>{{ $recipient->address }}</td>
-            </tr>
-            <tr>
-                <td class="label">Ukuran Sepatu</td>
-                <td>{{ $recipient->shoe_size }}</td>
-            </tr>
-            <tr>
-                <td class="label">Ukuran Baju</td>
-                <td>{{ $recipient->shirt_size }}</td>
-            </tr>
-            <tr>
-                <td class="label">Tanggal Penyaluran</td>
-                <td>{{ $recipient->distributed_at->format('d F Y, H:i') }} WIB</td>
-            </tr>
-        </table>
+        <div class="opening-text">
+            Dengan ini menyatakan bahwa bantuan sosial pendidikan telah diterima oleh penerima manfaat dengan data sebagai berikut:
+        </div>
+
+        <div class="recipient-data">
+            <table class="data-table">
+                <tr>
+                    <td class="label">Nama Penerima</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->child_name }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Nama Orang Tua</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->parent_name }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Tempat, Tanggal Lahir</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->birth_place }}, {{ $recipient->birth_date->format('d F Y') }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Sekolah</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->school_name }} ({{ $recipient->school_level }})</td>
+                </tr>
+                <tr>
+                    <td class="label">Kelas</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->class }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Alamat</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->address }}</td>
+                </tr>
+            </table>
+        </div>
 
         <div class="items-section">
-            <h3>Daftar Barang yang Diterima:</h3>
+            <p><strong>Dengan rincian bantuan yang diterima sebagai berikut:</strong></p>
             <table class="items-table">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Jenis Barang</th>
-                        <th>Status</th>
-                        <th>Keterangan</th>
+                        <th style="width: 10%;">No</th>
+                        <th style="width: 40%;">Jenis Bantuan</th>
+                        <th style="width: 20%;">Spesifikasi</th>
+                        <th style="width: 15%;">Status</th>
+                        <th style="width: 15%;">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>Seragam Sekolah</td>
+                        <td class="text-left">Seragam Sekolah</td>
+                        <td>Ukuran {{ $recipient->shirt_size }}</td>
                         <td>
                             @if($recipient->uniform_received)
-                                <span class="received-mark">✓ DITERIMA</span>
+                                <span class="status-received">✓ DITERIMA</span>
                             @else
-                                <span class="not-received-mark">✗ BELUM</span>
+                                <span>BELUM</span>
                             @endif
                         </td>
-                        <td>Ukuran: {{ $recipient->shirt_size }}</td>
+                        <td>1 Set</td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>Sepatu Sekolah</td>
+                        <td class="text-left">Sepatu Sekolah</td>
+                        <td>Ukuran {{ $recipient->shoe_size }}</td>
                         <td>
                             @if($recipient->shoes_received)
-                                <span class="received-mark">✓ DITERIMA</span>
+                                <span class="status-received">✓ DITERIMA</span>
                             @else
-                                <span class="not-received-mark">✗ BELUM</span>
+                                <span>BELUM</span>
                             @endif
                         </td>
-                        <td>Ukuran: {{ $recipient->shoe_size }}</td>
+                        <td>1 Pasang</td>
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td>Tas Sekolah</td>
+                        <td class="text-left">Tas Sekolah</td>
+                        <td>Standard</td>
                         <td>
                             @if($recipient->bag_received)
-                                <span class="received-mark">✓ DITERIMA</span>
+                                <span class="status-received">✓ DITERIMA</span>
                             @else
-                                <span class="not-received-mark">✗ BELUM</span>
+                                <span>BELUM</span>
                             @endif
                         </td>
-                        <td>-</td>
+                        <td>1 Buah</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="qr-section">
-            <p><strong>QR Code Verifikasi:</strong></p>
-            <img src="data:image/png;base64,{{ base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(150)->generate($encryptedCode)) }}" alt="QR Code">
-            <br>
-            <small>{{ $recipient->qr_code }}</small>
+        <div class="closing-text">
+            Bantuan sosial pendidikan ini diberikan dalam rangka mendukung pendidikan anak Indonesia dan diharapkan dapat dimanfaatkan dengan sebaik-baiknya untuk keperluan sekolah.
+        </div>
+
+        <div class="date-location">
+            Jakarta, {{ $recipient->distributed_at->format('d F Y') }}
         </div>
 
         <div class="signature-section">
-            <table style="width: 100%;">
+            <table class="signature-table">
                 <tr>
-                    <td style="width: 50%; text-align: center;">
+                    <td>
                         <div class="signature-box">
-                            <p><strong>Penerima/Orang Tua</strong></p>
-                            <div class="signature-line">
-                                {{ $recipient->parent_name }}
-                            </div>
+                            <p><strong>Penerima Bantuan</strong></p>
+                            <div class="signature-line"></div>
+                            <div class="signature-name">{{ $recipient->parent_name }}</div>
+                            <p><small>(Orang Tua/Wali)</small></p>
                         </div>
                     </td>
-                    <td style="width: 50%; text-align: center;">
+                    <td>
                         <div class="signature-box">
                             <p><strong>Petugas Penyalur</strong></p>
-                            <div class="signature-line">
-                                (.................................)
-                            </div>
+                            <div class="signature-line"></div>
+                            <div class="signature-name">(.............................)</div>
+                            <p><small>(Nama & Tanda Tangan)</small></p>
                         </div>
                     </td>
                 </tr>
             </table>
         </div>
+
+        <div class="qr-section">
+            <p><strong>Kode Verifikasi:</strong></p>
+            <img src="data:image/png;base64,{{ base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(100)->generate($encryptedCode)) }}" alt="QR Code">
+            <br>
+            <small>{{ $recipient->qr_code }}</small>
+        </div>
     </div>
 
     <div class="footer">
-        <p>Dokumen ini dicetak secara otomatis pada {{ now()->format('d F Y, H:i') }} WIB</p>
-        <p>Program Bantuan Sosial Pendidikan - Bazma Pertamina Cilincing</p>
-        <p><em>Dokumen ini sah tanpa tanda tangan basah</em></p>
+        <p><em>Dokumen ini dicetak secara otomatis pada {{ now()->format('d F Y, H:i') }} WIB</em></p>
+        <p><strong>Program Bantuan Sosial Pendidikan - Yayasan Bazma & PT Pertamina (Persero)</strong></p>
     </div>
 </body>
 </html>

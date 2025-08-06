@@ -124,6 +124,9 @@
                             <a href="{{ route('recipients.receipt', $recipient) }}" class="btn btn-success">
                                 <i class="fas fa-file-pdf me-2"></i>Cetak Bukti
                             </a>
+                            <a href="{{ route('recipients.signature', $recipient) }}" class="btn btn-warning">
+                                <i class="fas fa-signature me-2"></i>Form TTD
+                            </a>
                         @endif
                     </div>
                 </div>

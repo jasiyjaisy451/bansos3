@@ -175,12 +175,19 @@ $(document).ready(function() {
             return;
         }
         
-        const formData = {
-            uniform_received: $('#uniform_received').is(':checked'),
-            shoes_received: $('#shoes_received').is(':checked'),
-            bag_received: $('#bag_received').is(':checked'),
-            _token: '{{ csrf_token() }}'
-        };
+        // Prepare form data with proper checkbox handling
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        
+        if ($('#uniform_received').is(':checked')) {
+            formData.append('uniform_received', '1');
+        }
+        if ($('#shoes_received').is(':checked')) {
+            formData.append('shoes_received', '1');
+        }
+        if ($('#bag_received').is(':checked')) {
+            formData.append('bag_received', '1');
+        }
         
         // Show loading
         const submitBtn = $('#distributionForm button[type="submit"]');
@@ -191,6 +198,8 @@ $(document).ready(function() {
             url: `/recipients/${recipientId}/distribute`,
             method: 'POST',
             data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
                 if (response.success) {
                     // Update current recipient data
@@ -200,24 +209,30 @@ $(document).ready(function() {
                     }
                     
                     // Show success message
-                    $('#resultContent').prepend(`
+                    const successAlert = `
                         <div class="alert alert-success alert-dismissible fade show">
                             <i class="fas fa-check-circle me-2"></i>
                             ${response.message}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
-                    `);
+                    `;
+                    $('#resultContent').prepend(successAlert);
                     
                     if (response.is_fully_distributed) {
-                        $('#resultContent').prepend(`
-                            <div class="alert alert-success mt-3">
+                        const completeAlert = `
+                            <div class="alert alert-info mt-3">
                                 <i class="fas fa-check-circle me-2"></i>
-                                Penyaluran lengkap! Bukti penerimaan dapat dicetak.
-                                <a href="/recipients/${recipientId}/receipt" class="btn btn-sm btn-success ms-2" target="_blank">
+                                <strong>Penyaluran Lengkap!</strong> Bukti penerimaan dapat dicetak.
+                                <br><br>
+                                <a href="/recipients/${recipientId}/receipt" class="btn btn-success me-2" target="_blank">
                                     <i class="fas fa-file-pdf me-1"></i>Cetak Bukti
                                 </a>
+                                <a href="/recipients/${recipientId}/signature" class="btn btn-warning" target="_blank">
+                                    <i class="fas fa-signature me-1"></i>Form Tanda Tangan
+                                </a>
                             </div>
-                        `);
+                        `;
+                        $('#resultContent').prepend(completeAlert);
                     }
                 } else {
                     alert(response.message || 'Terjadi kesalahan');
@@ -225,7 +240,8 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 const response = xhr.responseJSON;
-                alert(response.message || 'Terjadi kesalahan saat memperbarui data');
+                console.error('Error:', response);
+                alert(response?.message || 'Terjadi kesalahan saat memperbarui data');
             },
             complete: function() {
                 // Restore button

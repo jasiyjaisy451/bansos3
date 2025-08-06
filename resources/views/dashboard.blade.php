@@ -179,10 +179,10 @@
                         </a>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <button class="btn btn-warning btn-block" onclick="window.print()">
+                        <a href="{{ route('recipients.report') }}" class="btn btn-warning btn-block" target="_blank">
                             <i class="fas fa-print me-2"></i>
                             Cetak Laporan
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
