@@ -103,7 +103,7 @@ class RecipientController extends Controller
 
         $pdf = Pdf::loadView('recipients.qr-print', compact('recipient', 'encryptedCode'));
 
-        return $pdf->download('qr-code-' . $recipient->qr_code . '.pdf');
+        return $pdf->stream('qr-code-' . $recipient->qr_code . '.pdf');
     }
 
     public function scanQr()
@@ -121,22 +121,22 @@ class RecipientController extends Controller
             // Try to decode base64 first (for scanned QR codes)
             $qrInput = $request->qr_code;
             $recipient = null;
-            
+
             // Check if it's a base64 encoded QR code
             if (base64_decode($qrInput, true) !== false) {
                 $decoded = base64_decode($qrInput);
                 $parts = explode('|', $decoded);
-                
+
                 if (count($parts) === 2) {
                     $qrCode = $parts[0];
                     $recipientId = $parts[1];
-                    
+
                     $recipient = Recipient::where('qr_code', $qrCode)
                         ->where('id', $recipientId)
                         ->first();
                 }
             }
-            
+
             // If not found, try direct QR code search
             if (!$recipient) {
                 $recipient = Recipient::where('qr_code', $qrInput)->first();
@@ -211,7 +211,7 @@ class RecipientController extends Controller
 
         $pdf = Pdf::loadView('recipients.receipt', compact('recipient', 'encryptedCode'));
 
-        return $pdf->download('bukti-penerimaan-' . $recipient->qr_code . '.pdf');
+        return $pdf->stream('bukti-penerimaan-' . $recipient->qr_code . '.pdf');
     }
 
     public function generateSignatureForm(Recipient $recipient)
@@ -224,7 +224,7 @@ class RecipientController extends Controller
 
         $pdf = Pdf::loadView('recipients.signature-form', compact('recipient', 'encryptedCode'));
 
-        return $pdf->download('form-tanda-tangan-' . $recipient->qr_code . '.pdf');
+        return $pdf->stream('form-tanda-tangan-' . $recipient->qr_code . '.pdf');
     }
 
     public function generateReport()
@@ -232,18 +232,18 @@ class RecipientController extends Controller
         $totalRecipients = Recipient::count();
         $distributedCount = Recipient::where('is_distributed', true)->count();
         $pendingCount = $totalRecipients - $distributedCount;
-        
+
         $uniformCount = Recipient::where('uniform_received', true)->count();
         $shoesCount = Recipient::where('shoes_received', true)->count();
         $bagCount = Recipient::where('bag_received', true)->count();
-        
+
         $recipients = Recipient::orderBy('created_at', 'desc')->get();
         $distributedRecipients = Recipient::where('is_distributed', true)
             ->orderBy('distributed_at', 'desc')->get();
 
         $pdf = Pdf::loadView('recipients.report', compact(
             'totalRecipients',
-            'distributedCount', 
+            'distributedCount',
             'pendingCount',
             'uniformCount',
             'shoesCount',
@@ -252,7 +252,7 @@ class RecipientController extends Controller
             'distributedRecipients'
         ));
 
-        return $pdf->download('laporan-bansos-pendidikan-' . date('Y-m-d') . '.pdf');
+        return $pdf->stream('laporan-bansos-pendidikan-' . date('Y-m-d') . '.pdf');
     }
 
     private function generateUniqueQrCode()

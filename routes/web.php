@@ -39,3 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/recipients/{recipient}/signature', [RecipientController::class, 'generateSignatureForm'])->name('recipients.signature');
     Route::get('/report', [RecipientController::class, 'generateReport'])->name('recipients.report');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
