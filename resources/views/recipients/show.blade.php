@@ -29,6 +29,14 @@
                                 <td>{{ $recipient->parent_name }}</td>
                             </tr>
                             <tr>
+                                <td><span>Nama Ayah:</span></td>
+                                <td>{{ $recipient->Ayah_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><span>Nama Ibu:</span></td>
+                                <td>{{ $recipient->Ibu_name }}</td>
+                            </tr>
+                            <tr>
                                 <td><strong>Tempat, Tanggal Lahir:</strong></td>
                                 <td>{{ $recipient->birth_place }}, {{ $recipient->birth_date->format('d F Y') }}</td>
                             </tr>

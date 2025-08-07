@@ -25,7 +25,8 @@ class RecipientController extends Controller
     {
         $request->validate([
             'child_name' => 'required|string|max:255',
-            'parent_name' => 'required|string|max:255',
+            'Ayah_name' => 'required|string|max:255',
+            'Ibu_name' => 'required|string|max:255',
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'school_level' => 'required|string|max:255',
@@ -61,7 +62,8 @@ class RecipientController extends Controller
     {
         $request->validate([
             'child_name' => 'required|string|max:255',
-            'parent_name' => 'required|string|max:255',
+            'Ayah_name' => 'required|string|max:255',
+            'Ibu_name' => 'required|string|max:255',
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'school_level' => 'required|string|max:255',
