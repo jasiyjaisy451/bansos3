@@ -9,7 +9,9 @@
             <i class="fas fa-file-alt me-2"></i>Cetak Laporan
         </a>
     </div>
-
+    <a href="{{ route('recipients.import') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Import Excel
+    </a>
     <a href="{{ route('recipients.create') }}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Tambah Penerima
     </a>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecipientController;
+use App\Http\Controllers\RecipientImportController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -38,6 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/recipients/{recipient}/receipt', [RecipientController::class, 'generateReceipt'])->name('recipients.receipt');
     Route::get('/recipients/{recipient}/signature', [RecipientController::class, 'generateSignatureForm'])->name('recipients.signature');
     Route::get('/report', [RecipientController::class, 'generateReport'])->name('recipients.report');
+    Route::get('/recipient/import', [RecipientImportController::class, 'form']);
+    Route::post('/recipient/import', [RecipientImportController::class, 'import'])->name('recipients.import');
+
 });
 
 Auth::routes();
