@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('qr_code')->unique();
             $table->string('child_name');
-            $table->string('parent_name');
+            $table->string('Ayah_name');
+            $table->string('Ibu_name');
             $table->string('birth_place');
             $table->date('birth_date');
             $table->string('school_level');

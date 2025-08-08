@@ -8,7 +8,7 @@
             margin: 2cm;
             size: A4;
         }
-        
+
         body {
             font-family: 'Times New Roman', serif;
             margin: 0;
@@ -17,38 +17,38 @@
             line-height: 1.4;
             color: #000;
         }
-        
+
         .letterhead {
             text-align: center;
             border-bottom: 3px solid #000;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
-        
+
         .letterhead h1 {
             font-size: 18pt;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
         }
-        
+
         .letterhead h2 {
             font-size: 16pt;
             font-weight: bold;
             margin: 5px 0;
             text-transform: uppercase;
         }
-        
+
         .letterhead p {
             font-size: 11pt;
             margin: 2px 0;
         }
-        
+
         .document-title {
             text-align: center;
             margin: 25px 0;
         }
-        
+
         .document-title h3 {
             font-size: 14pt;
             font-weight: bold;
@@ -56,122 +56,122 @@
             margin: 0;
             text-transform: uppercase;
         }
-        
+
         .document-number {
             text-align: center;
             margin-bottom: 25px;
             font-size: 11pt;
         }
-        
+
         .content {
             margin: 20px 0;
         }
-        
+
         .opening-text {
             text-align: justify;
             margin-bottom: 20px;
             text-indent: 30px;
         }
-        
+
         .recipient-data {
             margin: 20px 0;
         }
-        
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
         }
-        
+
         .data-table td {
             padding: 5px;
             vertical-align: top;
         }
-        
+
         .data-table .label {
             width: 25%;
             font-weight: bold;
         }
-        
+
         .data-table .colon {
             width: 3%;
             text-align: center;
         }
-        
+
         .items-section {
             margin: 25px 0;
         }
-        
+
         .items-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
         }
-        
+
         .items-table th,
         .items-table td {
             border: 1px solid #000;
             padding: 8px;
             text-align: center;
         }
-        
+
         .items-table th {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        
+
         .items-table .text-left {
             text-align: left;
         }
-        
+
         .status-received {
             font-weight: bold;
             color: #000;
         }
-        
+
         .closing-text {
             text-align: justify;
             margin: 25px 0;
             text-indent: 30px;
         }
-        
+
         .signature-section {
             margin-top: 40px;
         }
-        
+
         .signature-table {
             width: 100%;
             border-collapse: collapse;
         }
-        
+
         .signature-table td {
             width: 50%;
             text-align: center;
             vertical-align: top;
             padding: 10px;
         }
-        
+
         .signature-box {
             margin: 20px 0;
         }
-        
+
         .signature-line {
             border-bottom: 1px solid #000;
             height: 60px;
             margin: 10px 0;
         }
-        
+
         .signature-name {
             font-weight: bold;
             margin-top: 5px;
         }
-        
+
         .qr-section {
             text-align: center;
             margin: 20px 0;
             page-break-inside: avoid;
         }
-        
+
         .footer {
             margin-top: 30px;
             font-size: 10pt;
@@ -179,12 +179,12 @@
             border-top: 1px solid #000;
             padding-top: 10px;
         }
-        
+
         .date-location {
             text-align: right;
             margin: 20px 0;
         }
-        
+
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
@@ -193,6 +193,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="letterhead">
         <h1>Yayasan Bazma</h1>
@@ -205,7 +206,7 @@
     <div class="document-title">
         <h3>Bukti Penerimaan Bantuan Sosial Pendidikan</h3>
     </div>
-    
+
     <div class="document-number">
         Nomor: {{ $recipient->qr_code }}/BSP/{{ date('Y') }}
     </div>
@@ -223,9 +224,14 @@
                     <td>{{ $recipient->child_name }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nama Orang Tua</td>
+                    <td class="label">Nama Ayah</td>
                     <td class="colon">:</td>
-                    <td>{{ $recipient->parent_name }}</td>
+                    <td>{{ $recipient->Ayah_name }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Nama Ibu</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->Ibu_name }}</td>
                 </tr>
                 <tr>
                     <td class="label">Tempat, Tanggal Lahir</td>
@@ -269,7 +275,7 @@
                         <td>Ukuran {{ $recipient->shirt_size }}</td>
                         <td>
                             @if($recipient->uniform_received)
-                                <span class="status-received">✓ DITERIMA</span>
+                                <span class="status-received">DITERIMA</span>
                             @else
                                 <span>BELUM</span>
                             @endif
@@ -282,7 +288,7 @@
                         <td>Ukuran {{ $recipient->shoe_size }}</td>
                         <td>
                             @if($recipient->shoes_received)
-                                <span class="status-received">✓ DITERIMA</span>
+                                <span class="status-received">DITERIMA</span>
                             @else
                                 <span>BELUM</span>
                             @endif
@@ -295,7 +301,7 @@
                         <td>Standard</td>
                         <td>
                             @if($recipient->bag_received)
-                                <span class="status-received">✓ DITERIMA</span>
+                                <span class="status-received">DITERIMA</span>
                             @else
                                 <span>BELUM</span>
                             @endif
@@ -311,7 +317,7 @@
         </div>
 
         <div class="date-location">
-            Jakarta, {{ $recipient->distributed_at->format('d F Y') }}
+        Jakarta, {{ $recipient->distributed_at->format('d F Y') }}
         </div>
 
         <div class="signature-section">
@@ -321,7 +327,7 @@
                         <div class="signature-box">
                             <p><strong>Penerima Bantuan</strong></p>
                             <div class="signature-line"></div>
-                            <div class="signature-name">{{ $recipient->parent_name }}</div>
+                            <div class="signature-name"></div>
                             <p><small>(Orang Tua/Wali)</small></p>
                         </div>
                     </td>

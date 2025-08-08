@@ -6,33 +6,34 @@ use App\Models\Recipient;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Create admin user
+        // Array admin data
         User::create([
-            'name' => 'Administrator',
+            'name' => 'Admin',
             'email' => 'admin@bansos.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('4dm1n!2025'),
         ]);
-        
+
+
+        // Tambah operator
         User::create([
             'name' => 'Operator',
             'email' => 'operator@bansos.com',
-            'password' => Hash::make('operator123'),
+            'password' => Hash::make('Op3r@t0r!2025'),
         ]);
 
-        // Create sample recipients for testing
+        // Buat 10 data penerima
         for ($i = 1; $i <= 10; $i++) {
             Recipient::create([
                 'qr_code' => 'CBP' . str_pad($i, 4, '0', STR_PAD_LEFT),
                 'child_name' => 'Anak Contoh ' . $i,
-                'parent_name' => 'Orang Tua ' . $i,
+                'Ayah_name' => 'Ayah ' . $i,
+                'Ibu_name' => 'Ibu' . $i,
                 'birth_place' => 'Jakarta',
                 'birth_date' => '2010-01-' . str_pad($i, 2, '0', STR_PAD_LEFT),
                 'school_level' => 'SD',

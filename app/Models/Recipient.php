@@ -12,7 +12,8 @@ class Recipient extends Model
     protected $fillable = [
         'qr_code',
         'child_name',
-        'parent_name',
+        'Ayah_name',
+        'Ibu_name',
         'birth_place',
         'birth_date',
         'school_level',

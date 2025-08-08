@@ -10,11 +10,23 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class RecipientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $recipients = Recipient::paginate(20);
+        $search = $request->input('search');
+
+        $recipients = Recipient::when($search, function ($query, $search) {
+            $query->where('child_name', 'like', "%{$search}%")
+                ->orWhere('Ayah_name', 'like', "%{$search}%")
+                ->orWhere('Ibu_name', 'like', "%{$search}%")
+                ->orWhere('school_name', 'like', "%{$search}%");
+        })->orderBy('created_at', 'desc')->paginate(20);
+
+        // Keep search query in pagination links
+        $recipients->appends(['search' => $search]);
+
         return view('recipients.index', compact('recipients'));
     }
+
 
     public function create()
     {
@@ -25,7 +37,8 @@ class RecipientController extends Controller
     {
         $request->validate([
             'child_name' => 'required|string|max:255',
-            'parent_name' => 'required|string|max:255',
+            'Ayah_name' => 'required|string|max:255',
+            'Ibu_name' => 'required|string|max:255',
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'school_level' => 'required|string|max:255',
@@ -61,7 +74,9 @@ class RecipientController extends Controller
     {
         $request->validate([
             'child_name' => 'required|string|max:255',
-            'parent_name' => 'required|string|max:255',
+            'Ayah_name' => 'required|string|max:255',
+            'Ibu_name' => 'required|string|max:255',
+
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'school_level' => 'required|string|max:255',

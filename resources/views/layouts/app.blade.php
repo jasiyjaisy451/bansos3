@@ -113,7 +113,7 @@
                             <i class="fas fa-qrcode me-2"></i> Scan QR Code
                         </a>
                     </li>
-                    <li class="nav-item mt-4">
+                    <li class="nav-item">
                         <a class="nav-link text-light" href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt me-2"></i> Logout

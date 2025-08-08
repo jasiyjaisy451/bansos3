@@ -56,13 +56,13 @@
     <div class="qr-container">
         <div class="header">BAZMA PERTAMINA</div>
         <div class="header" style="font-size: 14px;">Bantuan Sosial Pendidikan</div>
-        
+
         <div class="qr-code">
             <img src="data:image/png;base64,{{ base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(150)->generate($encryptedCode)) }}" alt="QR Code">
         </div>
-        
+
         <div class="qr-text">{{ $recipient->qr_code }}</div>
-        
+
         <div class="recipient-info">
             <table>
                 <tr>
@@ -70,8 +70,12 @@
                     <td>{{ $recipient->child_name }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Orang Tua:</strong></td>
-                    <td>{{ $recipient->parent_name }}</td>
+                    <td><strong>Ayah:</strong></td>
+                    <td>{{ $recipient->Ayah_name }}</td>
+                </tr>
+                 <tr>
+                    <td><strong>Ibu:</strong></td>
+                    <td>{{ $recipient->Ibu_name }}</td>
                 </tr>
                 <tr>
                     <td><strong>Sekolah:</strong></td>
@@ -87,7 +91,7 @@
                 </tr>
             </table>
         </div>
-        
+
         <div class="footer">
             Scan QR ini saat penyaluran bantuan<br>
             Program Cilincing - Jakarta Utara

@@ -13,22 +13,30 @@
                 <form action="{{ route('recipients.update', $recipient) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="child_name" class="form-label">Nama Anak <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('child_name') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('child_name') is-invalid @enderror"
                                    id="child_name" name="child_name" value="{{ old('child_name', $recipient->child_name) }}" required>
                             @error('child_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label for="parent_name" class="form-label">Nama Orang Tua <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('parent_name') is-invalid @enderror" 
-                                   id="parent_name" name="parent_name" value="{{ old('parent_name', $recipient->parent_name) }}" required>
-                            @error('parent_name')
+
+                        <div class="col-md-3 mb-3">
+                            <label for="Ayah_name" class="form-label">Nama Ayah <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('Ayah_name') is-invalid @enderror"
+                                   id="Ayah_name" name="Ayah_name" value="{{ old('Ayah_name', $recipient->Ayah_name) }}" required>
+                            @error('Ayah_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+        <div class="col-md-3 mb-3">
+                            <label for="Ibu_name" class="form-label">Nama Ibu <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('Ibu_name') is-invalid @enderror"
+                                   id="Ibu_name" name="Ibu_name" value="{{ old('Ibu_name', $recipient->Ibu_name) }}" required>
+                            @error('Ibu_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -37,16 +45,16 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="birth_place" class="form-label">Tempat Lahir <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('birth_place') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('birth_place') is-invalid @enderror"
                                    id="birth_place" name="birth_place" value="{{ old('birth_place', $recipient->birth_place) }}" required>
                             @error('birth_place')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="col-md-6 mb-3">
                             <label for="birth_date" class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control @error('birth_date') is-invalid @enderror" 
+                            <input type="date" class="form-control @error('birth_date') is-invalid @enderror"
                                    id="birth_date" name="birth_date" value="{{ old('birth_date', $recipient->birth_date->format('Y-m-d')) }}" required>
                             @error('birth_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -57,7 +65,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="school_level" class="form-label">Tingkat Sekolah <span class="text-danger">*</span></label>
-                            <select class="form-select @error('school_level') is-invalid @enderror" 
+                            <select class="form-select @error('school_level') is-invalid @enderror"
                                     id="school_level" name="school_level" required>
                                 <option value="">Pilih Tingkat</option>
                                 <option value="SD" {{ old('school_level', $recipient->school_level) == 'SD' ? 'selected' : '' }}>SD</option>
@@ -69,10 +77,10 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="col-md-6 mb-3">
                             <label for="school_name" class="form-label">Nama Sekolah <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('school_name') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('school_name') is-invalid @enderror"
                                    id="school_name" name="school_name" value="{{ old('school_name', $recipient->school_name) }}" required>
                             @error('school_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -82,7 +90,7 @@
 
                     <div class="mb-3">
                         <label for="address" class="form-label">Alamat <span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('address') is-invalid @enderror" 
+                        <textarea class="form-control @error('address') is-invalid @enderror"
                                   id="address" name="address" rows="3" required>{{ old('address', $recipient->address) }}</textarea>
                         @error('address')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -92,25 +100,25 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="class" class="form-label">Kelas <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('class') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('class') is-invalid @enderror"
                                    id="class" name="class" value="{{ old('class', $recipient->class) }}" placeholder="Contoh: 5A" required>
                             @error('class')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="col-md-4 mb-3">
                             <label for="shoe_size" class="form-label">Nomor Sepatu <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('shoe_size') is-invalid @enderror" 
+                            <input type="text" class="form-control @error('shoe_size') is-invalid @enderror"
                                    id="shoe_size" name="shoe_size" value="{{ old('shoe_size', $recipient->shoe_size) }}" placeholder="Contoh: 38" required>
                             @error('shoe_size')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="col-md-4 mb-3">
                             <label for="shirt_size" class="form-label">Nomor Baju <span class="text-danger">*</span></label>
-                            <select class="form-select @error('shirt_size') is-invalid @enderror" 
+                            <select class="form-select @error('shirt_size') is-invalid @enderror"
                                     id="shirt_size" name="shirt_size" required>
                                 <option value="">Pilih Ukuran</option>
                                 <option value="XS" {{ old('shirt_size', $recipient->shirt_size) == 'XS' ? 'selected' : '' }}>XS</option>

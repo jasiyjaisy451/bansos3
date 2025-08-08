@@ -25,8 +25,12 @@
                                 <td>{{ $recipient->child_name }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Nama Orang Tua:</strong></td>
-                                <td>{{ $recipient->parent_name }}</td>
+                                <td><strong>Nama Ayah:</strong></td>
+                                <td>{{ $recipient->Ayah_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nama Ibu:</strong></td>
+                                <td>{{ $recipient->Ibu_name }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Tempat, Tanggal Lahir:</strong></td>
