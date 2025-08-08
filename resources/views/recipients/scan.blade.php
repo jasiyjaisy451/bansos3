@@ -13,7 +13,7 @@
                 <form id="qrForm">
                     <div class="mb-3">
                         <label for="qr_input" class="form-label">Masukkan Kode QR</label>
-                        <input type="text" class="form-control" id="qr_input" 
+                        <input type="text" class="form-control" id="qr_input"
                                placeholder="Scan atau ketik kode QR di sini..." autofocus>
                         <small class="form-text text-muted">
                             Gunakan scanner atau ketik manual kode QR
@@ -48,7 +48,7 @@
             <div class="card-body">
                 <form id="distributionForm">
                     <input type="hidden" id="recipient_id" name="recipient_id">
-                    
+
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-check form-switch">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mt-3">
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check me-2"></i>Update Penyaluran
@@ -95,7 +95,7 @@
 <script>
 $(document).ready(function() {
     let currentRecipient = null;
-    
+
     // Auto-submit when QR input changes (for scanner)
     $('#qr_input').on('input', function() {
         const value = $(this).val().trim();
@@ -107,7 +107,7 @@ $(document).ready(function() {
             }, 500);
         }
     });
-    
+
     // Handle Enter key
     $('#qr_input').on('keypress', function(e) {
         if (e.which === 13) {
@@ -119,13 +119,13 @@ $(document).ready(function() {
     // QR Verification Form
     $('#qrForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         const qrCode = $('#qr_input').val().trim();
         if (!qrCode) {
             alert('Masukkan kode QR terlebih dahulu');
             return;
         }
-        
+
         // Show loading
         $('#resultContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Memverifikasi...</div>');
         $('#resultCard').show();
@@ -143,7 +143,7 @@ $(document).ready(function() {
                     displayRecipientInfo(response.recipient);
                     $('#distributionSection').show();
                     $('#recipient_id').val(response.recipient.id);
-                    
+
                     // Set current distribution status
                     $('#uniform_received').prop('checked', response.recipient.uniform_received);
                     $('#shoes_received').prop('checked', response.recipient.shoes_received);
@@ -168,17 +168,17 @@ $(document).ready(function() {
     // Distribution Form
     $('#distributionForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         const recipientId = $('#recipient_id').val();
         if (!recipientId) {
             alert('Data penerima tidak ditemukan');
             return;
         }
-        
+
         // Prepare form data with proper checkbox handling
         const formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
-        
+
         if ($('#uniform_received').is(':checked')) {
             formData.append('uniform_received', '1');
         }
@@ -188,7 +188,7 @@ $(document).ready(function() {
         if ($('#bag_received').is(':checked')) {
             formData.append('bag_received', '1');
         }
-        
+
         // Show loading
         const submitBtn = $('#distributionForm button[type="submit"]');
         const originalText = submitBtn.html();
@@ -207,7 +207,7 @@ $(document).ready(function() {
                         currentRecipient = response.recipient;
                         displayRecipientInfo(currentRecipient);
                     }
-                    
+
                     // Show success message
                     const successAlert = `
                         <div class="alert alert-success alert-dismissible fade show">
@@ -217,7 +217,7 @@ $(document).ready(function() {
                         </div>
                     `;
                     $('#resultContent').prepend(successAlert);
-                    
+
                     if (response.is_fully_distributed) {
                         const completeAlert = `
                             <div class="alert alert-info mt-3">
@@ -252,7 +252,7 @@ $(document).ready(function() {
 });
 
 function displayRecipientInfo(recipient) {
-    const statusBadge = recipient.is_distributed 
+    const statusBadge = recipient.is_distributed
         ? '<span class="badge bg-success">Sudah Menerima</span>'
         : '<span class="badge bg-warning">Belum Menerima</span>';
 
@@ -278,7 +278,7 @@ function displayRecipientInfo(recipient) {
             <i class="fas fa-check-circle me-2"></i>
             QR Code valid!
         </div>
-        
+
         <div class="recipient-info">
             <h6><strong>${recipient.child_name}</strong> ${statusBadge}</h6>
             <p class="mb-1"><strong>QR Code:</strong> ${recipient.qr_code}</p>
@@ -286,11 +286,11 @@ function displayRecipientInfo(recipient) {
             <p class="mb-1"><strong>Sekolah:</strong> ${recipient.school_name} (${recipient.school_level})</p>
             <p class="mb-1"><strong>Kelas:</strong> ${recipient.class}</p>
             <p class="mb-1"><strong>Ukuran:</strong> Sepatu ${recipient.shoe_size}, Baju ${recipient.shirt_size}</p>
-            
+
             ${distributionItems}
         </div>
     `);
-    
+
     $('#resultCard').show();
 }
 

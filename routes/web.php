@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecipientController;
 use App\Http\Controllers\RecipientImportController;
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -41,6 +42,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/report', [RecipientController::class, 'generateReport'])->name('recipients.report');
     Route::get('/recipient/import', [RecipientImportController::class, 'form']);
     Route::post('/recipient/import', [RecipientImportController::class, 'import'])->name('recipients.import');
+    Route::post('/verify-qr-registration', [RecipientController::class, 'verifyQrRegistration']);
+    Route::post('/mark-registered', [RecipientController::class, 'markRegistered']);
+    Route::get('/registration', function () {
+        return view('registration');
+    })->name('registration');
+
+    Route::post('/registration/verify', [RegistrationController::class, 'verifyRegistrationQr'])->name('registration.verify');
+    Route::post('/registration/confirm', [RegistrationController::class, 'confirmRegistration'])->name('registration.confirm');
+
 
 });
 

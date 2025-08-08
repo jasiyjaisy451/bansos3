@@ -120,32 +120,17 @@ class RecipientController extends Controller
         ]);
 
         try {
-            // Try to decode base64 first (for scanned QR codes)
             $qrInput = $request->qr_code;
-            $recipient = null;
 
-            // Check if it's a base64 encoded QR code
-            if (base64_decode($qrInput, true) !== false) {
-                $decoded = base64_decode($qrInput);
-                $parts = explode('|', $decoded);
-
-                if (count($parts) === 2) {
-                    $qrCode = $parts[0];
-                    $recipientId = $parts[1];
-
-                    $recipient = Recipient::where('qr_code', $qrCode)
-                        ->where('id', $recipientId)
-                        ->first();
-                }
-            }
-
-            // If not found, try direct QR code search
-            if (!$recipient) {
-                $recipient = Recipient::where('qr_code', $qrInput)->first();
-            }
+            $recipient = Recipient::where('qr_code', $qrInput)->first();
 
             if (!$recipient) {
                 return response()->json(['error' => 'QR Code tidak ditemukan'], 404);
+            }
+
+            // Tambahkan pengecekan: harus sudah registrasi
+            if (!$recipient->registrasi) {
+                return response()->json(['error' => 'Penerima belum registrasi'], 403);
             }
 
             return response()->json([
@@ -158,6 +143,10 @@ class RecipientController extends Controller
             return response()->json(['error' => 'QR Code tidak valid: ' . $e->getMessage()], 400);
         }
     }
+
+
+
+
 
     public function distribute(Request $request, Recipient $recipient)
     {
@@ -269,4 +258,74 @@ class RecipientController extends Controller
 
         return $qrCode;
     }
+
+    public function verifyQrRegistration(Request $request)
+    {
+        $request->validate([
+            'qr_code' => 'required|string'
+        ]);
+
+        try {
+            $qrInput = $request->qr_code;
+
+            // Cari penerima berdasarkan QR Code
+            $recipient = Recipient::where('qr_code', $qrInput)->first();
+
+            if (!$recipient) {
+                return response()->json(['error' => 'QR Code tidak ditemukan'], 404);
+            }
+
+            // Jika sudah registrasi, beri info
+            if ($recipient->registrasi) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Penerima ini sudah terdaftar (registrasi sudah dilakukan).',
+                    'recipient' => $recipient
+                ], 200);
+            }
+
+            // Kalau belum, kirim data untuk ditampilkan di halaman registrasi
+            return response()->json([
+                'success' => true,
+                'recipient' => $recipient
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'QR Code tidak valid: ' . $e->getMessage()], 400);
+        }
+    }
+
+    public function markRegistered(Request $request)
+    {
+        $request->validate([
+            'qr_code' => 'required|string'
+        ]);
+
+        try {
+            $recipient = Recipient::where('qr_code', $request->qr_code)->first();
+
+            if (!$recipient) {
+                return response()->json(['error' => 'QR Code tidak ditemukan'], 404);
+            }
+
+            if ($recipient->registered) {
+                return response()->json(['error' => 'Penerima ini sudah terdaftar sebelumnya'], 400);
+            }
+
+            // Update status registrasi
+            $recipient->registrasi = true;
+            $recipient->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Registrasi berhasil disimpan',
+                'recipient' => $recipient
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal memperbarui registrasi: ' . $e->getMessage()], 400);
+        }
+    }
+
+
 }

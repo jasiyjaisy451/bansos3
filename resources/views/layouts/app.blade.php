@@ -109,8 +109,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('registration') ? 'active' : '' }}" href="{{ route('registration') }}">
+                            <i class="fas fa-users me-2"></i> Registrasi
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('recipients.scan') ? 'active' : '' }}" href="{{ route('recipients.scan') }}">
-                            <i class="fas fa-qrcode me-2"></i> Scan QR Code
+                            <i class="fas fa-qrcode me-2"></i> Penyaluran
                         </a>
                     </li>
                     <li class="nav-item mt-4">
