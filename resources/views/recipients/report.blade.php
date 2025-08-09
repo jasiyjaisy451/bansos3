@@ -8,7 +8,7 @@
             margin: 2cm;
             size: A4;
         }
-        
+
         body {
             font-family: 'Times New Roman', serif;
             margin: 0;
@@ -17,38 +17,38 @@
             line-height: 1.3;
             color: #000;
         }
-        
+
         .letterhead {
             text-align: center;
             border-bottom: 3px solid #000;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
-        
+
         .letterhead h1 {
             font-size: 18pt;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
         }
-        
+
         .letterhead h2 {
             font-size: 16pt;
             font-weight: bold;
             margin: 5px 0;
             text-transform: uppercase;
         }
-        
+
         .letterhead p {
             font-size: 11pt;
             margin: 2px 0;
         }
-        
+
         .document-title {
             text-align: center;
             margin: 25px 0;
         }
-        
+
         .document-title h3 {
             font-size: 14pt;
             font-weight: bold;
@@ -56,76 +56,76 @@
             margin: 0;
             text-transform: uppercase;
         }
-        
+
         .report-info {
             text-align: center;
             margin-bottom: 25px;
             font-size: 11pt;
         }
-        
+
         .summary-section {
             margin: 20px 0;
         }
-        
+
         .summary-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
         }
-        
+
         .summary-table th,
         .summary-table td {
             border: 1px solid #000;
             padding: 8px;
             text-align: center;
         }
-        
+
         .summary-table th {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        
+
         .summary-table .text-left {
             text-align: left;
         }
-        
+
         .detail-section {
             margin: 25px 0;
             page-break-inside: avoid;
         }
-        
+
         .detail-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
             font-size: 9pt;
         }
-        
+
         .detail-table th,
         .detail-table td {
             border: 1px solid #000;
             padding: 4px;
             text-align: center;
         }
-        
+
         .detail-table th {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        
+
         .detail-table .text-left {
             text-align: left;
         }
-        
+
         .status-distributed {
             color: #000;
             font-weight: bold;
         }
-        
+
         .status-pending {
             color: #666;
         }
-        
+
         .footer {
             margin-top: 30px;
             font-size: 10pt;
@@ -133,18 +133,18 @@
             border-top: 1px solid #000;
             padding-top: 10px;
         }
-        
+
         .signature-section {
             margin-top: 40px;
             text-align: right;
         }
-        
+
         .signature-box {
             display: inline-block;
             text-align: center;
             margin-top: 20px;
         }
-        
+
         .signature-line {
             border-bottom: 1px solid #000;
             width: 200px;
@@ -165,7 +165,7 @@
     <div class="document-title">
         <h3>Laporan Distribusi Bantuan Sosial Pendidikan</h3>
     </div>
-    
+
     <div class="report-info">
         <p><strong>Periode:</strong> {{ date('d F Y') }}</p>
         <p><strong>Lokasi:</strong> Jakarta Utara</p>
@@ -205,39 +205,7 @@
         </table>
     </div>
 
-    <div class="summary-section">
-        <h4>II. DISTRIBUSI PER JENIS BANTUAN</h4>
-        <table class="summary-table">
-            <thead>
-                <tr>
-                    <th style="width: 40%;">Jenis Bantuan</th>
-                    <th style="width: 20%;">Terdistribusi</th>
-                    <th style="width: 20%;">Persentase</th>
-                    <th style="width: 20%;">Sisa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-left">Seragam Sekolah</td>
-                    <td><strong>{{ $uniformCount }}</strong></td>
-                    <td>{{ $totalRecipients > 0 ? round(($uniformCount / $totalRecipients) * 100, 1) : 0 }}%</td>
-                    <td>{{ $totalRecipients - $uniformCount }}</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Sepatu Sekolah</td>
-                    <td><strong>{{ $shoesCount }}</strong></td>
-                    <td>{{ $totalRecipients > 0 ? round(($shoesCount / $totalRecipients) * 100, 1) : 0 }}%</td>
-                    <td>{{ $totalRecipients - $shoesCount }}</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Tas Sekolah</td>
-                    <td><strong>{{ $bagCount }}</strong></td>
-                    <td>{{ $totalRecipients > 0 ? round(($bagCount / $totalRecipients) * 100, 1) : 0 }}%</td>
-                    <td>{{ $totalRecipients - $bagCount }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
 
     @if($distributedRecipients->count() > 0)
     <div class="detail-section">
@@ -245,15 +213,13 @@
         <table class="detail-table">
             <thead>
                 <tr>
-                    <th style="width: 5%;">No</th>
+                    <th style="width: 2%;">No</th>
                     <th style="width: 10%;">QR Code</th>
                     <th style="width: 20%;">Nama Anak</th>
-                    <th style="width: 20%;">Nama Orang Tua</th>
+                    <th style="width: 20%;">Nama Ayah</th>
+                    <th style="width: 20%;">Nama Ibu</th>
                     <th style="width: 15%;">Sekolah</th>
                     <th style="width: 8%;">Kelas</th>
-                    <th style="width: 7%;">Seragam</th>
-                    <th style="width: 7%;">Sepatu</th>
-                    <th style="width: 8%;">Tas</th>
                 </tr>
             </thead>
             <tbody>
@@ -262,12 +228,10 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $recipient->qr_code }}</td>
                     <td class="text-left">{{ $recipient->child_name }}</td>
-                    <td class="text-left">{{ $recipient->parent_name }}</td>
+                    <td class="text-left">{{ $recipient->Ayah_name }}</td>
+                    <td class="text-left">{{ $recipient->Ibu_name }}</td>
                     <td class="text-left">{{ $recipient->school_name }}</td>
                     <td>{{ $recipient->class }}</td>
-                    <td>{{ $recipient->uniform_received ? '✓' : '-' }}</td>
-                    <td>{{ $recipient->shoes_received ? '✓' : '-' }}</td>
-                    <td>{{ $recipient->bag_received ? '✓' : '-' }}</td>
                 </tr>
                 @endforeach
             </tbody>

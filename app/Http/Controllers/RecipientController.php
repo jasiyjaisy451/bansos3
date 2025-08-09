@@ -151,38 +151,16 @@ class RecipientController extends Controller
     public function distribute(Request $request, Recipient $recipient)
     {
         try {
-            // Convert checkbox values to boolean
-            $uniformReceived = $request->has('uniform_received') ? true : false;
-            $shoesReceived = $request->has('shoes_received') ? true : false;
-            $bagReceived = $request->has('bag_received') ? true : false;
-
             $recipient->update([
-                'uniform_received' => $uniformReceived,
-                'shoes_received' => $shoesReceived,
-                'bag_received' => $bagReceived,
+                'is_distributed' => true,
+                'distributed_at' => now()
             ]);
-
-            // Check if all items are distributed
-            $recipient->refresh();
-            if ($recipient->uniform_received && $recipient->shoes_received && $recipient->bag_received) {
-                $recipient->update([
-                    'is_distributed' => true,
-                    'distributed_at' => now()
-                ]);
-            } else {
-                $recipient->update([
-                    'is_distributed' => false,
-                    'distributed_at' => null
-                ]);
-            }
-
-            $recipient->refresh();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Status penyaluran berhasil diperbarui',
-                'is_fully_distributed' => $recipient->is_distributed,
-                'recipient' => $recipient
+                'is_fully_distributed' => true,
+                'recipient_id' => $recipient->id
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -191,6 +169,8 @@ class RecipientController extends Controller
             ], 500);
         }
     }
+
+
 
     public function generateReceipt(Recipient $recipient)
     {
@@ -224,9 +204,6 @@ class RecipientController extends Controller
         $distributedCount = Recipient::where('is_distributed', true)->count();
         $pendingCount = $totalRecipients - $distributedCount;
 
-        $uniformCount = Recipient::where('uniform_received', true)->count();
-        $shoesCount = Recipient::where('shoes_received', true)->count();
-        $bagCount = Recipient::where('bag_received', true)->count();
 
         $recipients = Recipient::orderBy('created_at', 'desc')->get();
         $distributedRecipients = Recipient::where('is_distributed', true)
@@ -236,9 +213,6 @@ class RecipientController extends Controller
             'totalRecipients',
             'distributedCount',
             'pendingCount',
-            'uniformCount',
-            'shoesCount',
-            'bagCount',
             'recipients',
             'distributedRecipients'
         ));

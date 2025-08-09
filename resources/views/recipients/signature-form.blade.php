@@ -8,7 +8,7 @@
             margin: 2cm;
             size: A4;
         }
-        
+
         body {
             font-family: 'Times New Roman', serif;
             margin: 0;
@@ -17,38 +17,38 @@
             line-height: 1.4;
             color: #000;
         }
-        
+
         .letterhead {
             text-align: center;
             border-bottom: 3px solid #000;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
-        
+
         .letterhead h1 {
             font-size: 18pt;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
         }
-        
+
         .letterhead h2 {
             font-size: 16pt;
             font-weight: bold;
             margin: 5px 0;
             text-transform: uppercase;
         }
-        
+
         .letterhead p {
             font-size: 11pt;
             margin: 2px 0;
         }
-        
+
         .document-title {
             text-align: center;
             margin: 25px 0;
         }
-        
+
         .document-title h3 {
             font-size: 14pt;
             font-weight: bold;
@@ -56,49 +56,49 @@
             margin: 0;
             text-transform: uppercase;
         }
-        
+
         .content {
             margin: 20px 0;
         }
-        
+
         .recipient-info {
             background-color: #f9f9f9;
             border: 1px solid #000;
             padding: 15px;
             margin: 20px 0;
         }
-        
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
         }
-        
+
         .data-table td {
             padding: 5px;
             vertical-align: top;
         }
-        
+
         .data-table .label {
             width: 25%;
             font-weight: bold;
         }
-        
+
         .data-table .colon {
             width: 3%;
             text-align: center;
         }
-        
+
         .signature-section {
             margin-top: 50px;
         }
-        
+
         .signature-table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
         }
-        
+
         .signature-table th,
         .signature-table td {
             border: 1px solid #000;
@@ -106,16 +106,16 @@
             text-align: center;
             vertical-align: top;
         }
-        
+
         .signature-table th {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        
+
         .signature-space {
             height: 80px;
         }
-        
+
         .instructions {
             margin: 20px 0;
             padding: 15px;
@@ -123,14 +123,14 @@
             border: 1px solid #ffeaa7;
             border-radius: 5px;
         }
-        
+
         .qr-section {
             text-align: center;
             margin: 20px 0;
             border: 1px solid #000;
             padding: 15px;
         }
-        
+
         .footer {
             margin-top: 30px;
             font-size: 10pt;
@@ -150,7 +150,7 @@
     </div>
 
     <div class="document-title">
-        <h3>Form Tanda Tangan Penerimaan Bantuan</h3>
+        <h3>Tanda Bukti Penerimaan Bantuan</h3>
     </div>
 
     <div class="content">
@@ -168,9 +168,14 @@
                     <td>{{ $recipient->child_name }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nama Orang Tua</td>
+                    <td class="label">Nama Ayah</td>
                     <td class="colon">:</td>
-                    <td>{{ $recipient->parent_name }}</td>
+                    <td>{{ $recipient->Ayah_name }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Nama Ibu</td>
+                    <td class="colon">:</td>
+                    <td>{{ $recipient->Ibu_name }}</td>
                 </tr>
                 <tr>
                     <td class="label">Sekolah</td>

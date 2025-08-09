@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Sistem Bansos Pendidikan') }}</title>
+    <title>{{ config('Bansos', 'Sistem Bansos Pendidikan') }}</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -69,7 +69,7 @@
         }
 
         .logo-pertamina {
-            height: 60px;
+            height: 120px;
             margin-bottom: 10px;
         }
 
@@ -93,7 +93,7 @@
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
             <div class="position-sticky pt-3 text-center sidebar-header">
-                <img src="https://akiradata.co.id/wp-content/uploads/2020/05/logo-pertamina.png" alt="Logo Pertamina" class="logo-pertamina">
+                <img src="https://i.postimg.cc/3JH5h5st/logo.png" alt="Logo Pertamina" class="logo-pertamina">
                 <h5>Sistem Bansos</h5>
                 <h5>Pendidikan</h5>
                 <hr class="border-light">
