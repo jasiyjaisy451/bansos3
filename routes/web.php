@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecipientController;
 use App\Http\Controllers\RecipientImportController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +28,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware(['auth'])->group(function () {
+// Hanya admin yang boleh akses route ini
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
@@ -50,10 +52,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/registration/verify', [RegistrationController::class, 'verifyRegistrationQr'])->name('registration.verify');
     Route::post('/registration/confirm', [RegistrationController::class, 'confirmRegistration'])->name('registration.confirm');
-
-
 });
+
+// route default user biasa bisa di sini
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('/user', [UserController::class, 'index'])->name('userdashboard');
+    Route::get('/list', [UserController::class, 'list'])->name('list');
+});
